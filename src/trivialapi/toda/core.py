@@ -1,3 +1,4 @@
+# src/trivialapi/toda/core.py
 import json
 import os
 
@@ -83,12 +84,12 @@ class TODA:
 
 
 class Twin:
-    def __init__(self, id, hostname, key, balances):
+    def __init__(self, id, hostname, key, balances, **kwargs):
         self.id = id
         self.hostname = hostname
         self.key = key
         self.balances = balances
-        pass
+        self.extras = kwargs
 
     @classmethod
     def from_dict(cls, dct):
@@ -141,6 +142,15 @@ class Twin:
         return util.apiGet(
             f"https://{self.hostname}/inventory/{filehash}?apiKey={self.key}", None
         )[0]
+
+    # def controlAll(self, filehashes):
+    #     for f in filehashes:
+    #         entry = self.inventory(f)
+    #         if entry and entry["isControlled"]:
+    #             continue
+    #         else:
+    #             return False
+    #     return True
 
     def transfer(self, root, amount, destination_hostname, metadata=None):
         dat = {"amount": amount, "destination": destination_hostname}
